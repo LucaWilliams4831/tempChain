@@ -4,7 +4,7 @@
       "description": "The native staking and governance token of the Evmos chain",
       "denom_units": [
         {
-          "denom": "bit",
+          "denom": "volley",
           "exponent": 0
         },
         {
@@ -12,9 +12,9 @@
           "exponent": 18
         }
       ],
-      "base": "bit",
-      "display": "bit",
-      "name": "bit",
+      "base": "volley",
+      "display": "volley",
+      "name": "volley",
       "symbol": "BEXC"
     }
   ]

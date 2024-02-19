@@ -44,7 +44,7 @@ func SafeNewIntFromBigInt(i *big.Int) (sdkmath.Int, error) {
 	return sdkmath.NewIntFromBigInt(i), nil
 }
 
-// IsValidInt256 check the bound of 256 bit number
+// IsValidInt256 check the bound of 256 volley number
 func IsValidInt256(i *big.Int) bool {
 	return i == nil || i.BitLen() <= maxBitLen
 }

@@ -70,10 +70,10 @@ func TestTxData_DeriveChainID(t *testing.T) {
 			"chain ID 9000", &LegacyTx{V: big.NewInt(18035).Bytes()}, big.NewInt(9000),
 		},
 		{
-			"bit len 64", &LegacyTx{V: bitLen64.Bytes()}, big.NewInt(4611686018427387886),
+			"volley len 64", &LegacyTx{V: bitLen64.Bytes()}, big.NewInt(4611686018427387886),
 		},
 		{
-			"bit len 80", &LegacyTx{V: bitLen80.Bytes()}, expBitLen80,
+			"volley len 80", &LegacyTx{V: bitLen80.Bytes()}, expBitLen80,
 		},
 		{
 			"v = nil ", &LegacyTx{V: nil}, nil,

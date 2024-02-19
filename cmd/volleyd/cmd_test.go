@@ -10,12 +10,12 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/evmos/evmos/v12/app"
-	byted "github.com/evmos/evmos/v12/cmd/byted"
+	volleyd "github.com/evmos/evmos/v12/cmd/volleyd"
 	"github.com/evmos/evmos/v12/utils"
 )
 
 func TestInitCmd(t *testing.T) {
-	rootCmd, _ := byted.NewRootCmd()
+	rootCmd, _ := volleyd.NewRootCmd()
 	rootCmd.SetArgs([]string{
 		"init",       // Test the init cmd
 		"evmos-test", // Moniker
@@ -23,12 +23,12 @@ func TestInitCmd(t *testing.T) {
 		fmt.Sprintf("--%s=%s", flags.FlagChainID, utils.TestnetChainID+"-1"),
 	})
 
-	err := svrcmd.Execute(rootCmd, "byted", app.DefaultNodeHome)
+	err := svrcmd.Execute(rootCmd, "volleyd", app.DefaultNodeHome)
 	require.NoError(t, err)
 }
 
 func TestAddKeyLedgerCmd(t *testing.T) {
-	rootCmd, _ := byted.NewRootCmd()
+	rootCmd, _ := volleyd.NewRootCmd()
 	rootCmd.SetArgs([]string{
 		"keys",
 		"add",

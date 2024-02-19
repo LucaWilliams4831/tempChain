@@ -1,17 +1,17 @@
 #!/bin/bash
 
-KEYS[0]="ByteFoundation"
+KEYS[0]="VOLLEYADMIN"
 
-CHAINID="byte_1919-1"
-MONIKER="byteteam"
+CHAINID="volley_7777-7777"
+MONIKER="ADMIN"
 # Remember to change to other types of keyring like 'file' in-case exposing to outside world,
 # otherwise your balance will be wiped quickly
 # The keyring test does not require private key to steal tokens from you
 KEYRING="os"
 KEYALGO="eth_secp256k1"
 LOGLEVEL="info"
-# Set dedicated home directory for the byted instance
-HOMEDIR="$HOME/.byted"
+# Set dedicated home directory for the volleyd instance
+HOMEDIR="$HOME/.volleyd"
 # to trace evm
 #TRACE="--trace"
 TRACE=""
@@ -48,23 +48,23 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	rm -rf "$HOMEDIR"
 
 	# Set client config
-	byted config keyring-backend $KEYRING --home "$HOMEDIR"
-	byted config chain-id $CHAINID --home "$HOMEDIR"
+	volleyd config keyring-backend $KEYRING --home "$HOMEDIR"
+	volleyd config chain-id $CHAINID --home "$HOMEDIR"
 
 	# If keys exist they should be deleted
 	for KEY in "${KEYS[@]}"; do
-		byted keys add $KEY --keyring-backend $KEYRING --algo $KEYALGO --home "$HOMEDIR" 
+		volleyd keys add $KEY --keyring-backend $KEYRING --algo $KEYALGO --home "$HOMEDIR" 
 	done
 
 	# Set moniker and chain-id for Evmos (Moniker can be anything, chain-id must be an integer)
-	byted init $MONIKER -o --chain-id $CHAINID --home "$HOMEDIR"
+	volleyd init $MONIKER -o --chain-id $CHAINID --home "$HOMEDIR"
 
 	# Change parameter token denominations to byte
-	jq '.app_state["staking"]["params"]["bond_denom"]="bit"' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
-	jq '.app_state["crisis"]["constant_fee"]["denom"]="bit"' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
-	jq '.app_state["gov"]["deposit_params"]["min_deposit"][0]["denom"]="bit"' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
-	jq '.app_state["evm"]["params"]["evm_denom"]="bit"' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
-	jq '.app_state["inflation"]["params"]["mint_denom"]="bit"' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
+	jq '.app_state["staking"]["params"]["bond_denom"]="avolley"' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
+	jq '.app_state["crisis"]["constant_fee"]["denom"]="avolley"' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
+	jq '.app_state["gov"]["deposit_params"]["min_deposit"][0]["denom"]="avolley"' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
+	jq '.app_state["evm"]["params"]["evm_denom"]="avolley"' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
+	jq '.app_state["inflation"]["params"]["mint_denom"]="avolley"' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 	jq '.app_state["inflation"]["params"]["exponential_calculation"]["a"]="1000000000.000000000000000000"' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 	jq '.app_state["inflation"]["params"]["exponential_calculation"]["c"]="31250000.000000000000000000"' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 	jq '.app_state["inflation"]["params"]["exponential_calculation"]["bonding_target"]="0.650000000000000000"' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
@@ -98,7 +98,7 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 	# Set claims records for validator account
 	amount_to_claim=10000
 	claims_key=${KEYS[0]}
-	# node_address=$(byted keys show $claims_key --keyring-backend $KEYRING --home "$HOMEDIR" | grep "address" | cut -c12-)
+	# node_address=$(volleyd keys show $claims_key --keyring-backend $KEYRING --home "$HOMEDIR" | grep "address" | cut -c12-)
 	# jq -r --arg node_address "$node_address" --arg amount_to_claim "$amount_to_claim" '.app_state["claims"]["claims_records"]=[{"initial_claimable_amount":$amount_to_claim, "actions_completed":[false, false, false, false],"address":$node_address}]' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 	# jq -r --arg amount_to_claim "$amount_to_claim" '.app_state["bank"]["balances"] += [{"address":"evmos15cvq3ljql6utxseh0zau9m8ve2j8erz89m5wkz","coins":[{"denom":"aevmos", "amount":$amount_to_claim}]}]' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 	
@@ -128,13 +128,13 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 		fi
 	fi
 
-	sed -i 's/timeout_commit = "5s"/timeout_commit = "2s"/g' "$CONFIG"
+	sed -i 's/timeout_commit = "5s"/timeout_commit = "3s"/g' "$CONFIG"
 	sed -i 's/cors_allowed_origins = \[\]/cors_allowed_origins = \["*"\]/g' "$CONFIG"
 	sed -i 's/laddr = "tcp:\/\/127.0.0.1:26657"/laddr = "tcp:\/\/0.0.0.0:26657"/g' "$CONFIG"
 
-	sed -i 's/address = "127.0.0.1:8545"/address = "0.0.0.0:8545"/g' ~/.byted/config/app.toml
-	sed -i 's/ws-address = "127.0.0.1:8546"/ws-address = "0.0.0.0:8546"/g' ~/.byted/config/app.toml
-	sed -i 's/tracer = ""/tracer = "json"/g' ~/.byted/config/app.toml
+	sed -i 's/address = "127.0.0.1:8545"/address = "0.0.0.0:8545"/g' ~/.volleyd/config/app.toml
+	sed -i 's/ws-address = "127.0.0.1:8546"/ws-address = "0.0.0.0:8546"/g' ~/.volleyd/config/app.toml
+	sed -i 's/tracer = ""/tracer = "json"/g' ~/.volleyd/config/app.toml
 	
 	######### for security##########
 	# sed -i 's/pex = true/pex = false/g' "$CONFIG"
@@ -143,9 +143,9 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 
 	# sed -i 's/laddr = "tcp:\/\/0.0.0.0:26656"/laddr = "tcp:\/\/127.0.0.1:26656"/g' "$CONFIG"
 
-	# sed -i 's/address = "tcp:\/\/0.0.0.0:1317"/address = "tcp:\/\/127.0.0.1:1317"/g' ~/.byted/config/app.toml
-	# sed -i 's/address = "0.0.0.0:9090"/address = "127.0.0.1:9090"/g' ~/.byted/config/app.toml
-	# sed -i 's/address = "0.0.0.0:9091"/address = "127.0.0.1:9091"/g' ~/.byted/config/app.toml
+	# sed -i 's/address = "tcp:\/\/0.0.0.0:1317"/address = "tcp:\/\/127.0.0.1:1317"/g' ~/.volleyd/config/app.toml
+	# sed -i 's/address = "0.0.0.0:9090"/address = "127.0.0.1:9090"/g' ~/.volleyd/config/app.toml
+	# sed -i 's/address = "0.0.0.0:9091"/address = "127.0.0.1:9091"/g' ~/.volleyd/config/app.toml
 
 	# ########## following https://docs.evmos.org/validate/security/validator-security-checklist for validator node####
 	# sed -i 's/max_num_inbound_peers = 240/max_num_inbound_peers = 100/g' "$CONFIG"
@@ -153,38 +153,38 @@ if [[ $overwrite == "y" || $overwrite == "Y" ]]; then
 		
 	#####################
 	
-	sed -i '/\[api\]/,+3 s/enable = false/enable = true/' ~/.byted/config/app.toml
-	sed -i 's/swagger = false/swagger = true/g' ~/.byted/config/app.toml
-	sed -i 's/enabled-unsafe-cors = false/enabled-unsafe-cors = true/g'  ~/.byted/config/app.toml
-	sed -i 's/enable-indexer = false/enable-indexer = true/g' ~/.byted/config/app.toml
-	sed -i 's/api = "eth,net,web3"/api = "eth,txpool,personal,net,debug,web3,pubsub,trace"/g' ~/.byted/config/app.toml
-	sed -i 's/pruning = "default"/pruning = "nothing"/g' ~/.byted/config/app.toml
+	sed -i '/\[api\]/,+3 s/enable = false/enable = true/' ~/.volleyd/config/app.toml
+	sed -i 's/swagger = false/swagger = true/g' ~/.volleyd/config/app.toml
+	sed -i 's/enabled-unsafe-cors = false/enabled-unsafe-cors = true/g'  ~/.volleyd/config/app.toml
+	sed -i 's/enable-indexer = false/enable-indexer = true/g' ~/.volleyd/config/app.toml
+	sed -i 's/api = "eth,net,web3"/api = "eth,txpool,personal,net,debug,web3,pubsub,trace"/g' ~/.volleyd/config/app.toml
+	sed -i 's/pruning = "default"/pruning = "nothing"/g' ~/.volleyd/config/app.toml
 
 	# Allocate genesis accounts (cosmos formatted addresses)
 	
-	byted add-genesis-account ${KEYS[0]} 150025000000000000000000000bit --keyring-backend $KEYRING --home "$HOMEDIR"
+	volleyd add-genesis-account ${KEYS[0]} 7000000000000000000000000avolley --keyring-backend $KEYRING --home "$HOMEDIR"
 
 	# bc is required to add these big numbers
-	total_supply=$(echo "150025000000000000000000000" | bc)
+	total_supply=$(echo "7000000000000000000000000" | bc)
 	jq -r --arg total_supply "$total_supply" '.app_state["bank"]["supply"][0]["amount"]=$total_supply' "$GENESIS" >"$TMP_GENESIS" && mv "$TMP_GENESIS" "$GENESIS"
 
 
 	# Sign genesis transaction
-	byted gentx ${KEYS[0]} 25000000000000000000000bit --keyring-backend $KEYRING --chain-id $CHAINID --home "$HOMEDIR"  --fees 20000000000000bit --min-self-delegation 6400000
+	volleyd gentx ${KEYS[0]} 1avolley --keyring-backend $KEYRING --chain-id $CHAINID --home "$HOMEDIR"  --fees 20000000000000avolley --min-self-delegation 1
 
 
 
 	# Collect genesis tx
-	byted collect-gentxs --home "$HOMEDIR"
+	volleyd collect-gentxs --home "$HOMEDIR"
 
 	# Run this to ensure everything worked and that the genesis file is setup correctly
-	byted validate-genesis --home "$HOMEDIR"
+	volleyd validate-genesis --home "$HOMEDIR"
 
 	if [[ $1 == "pending" ]]; then
 		echo "pending mode is on, please wait for the first block committed."
 	fi
 fi
 
-byted start --pruning=nothing "$TRACE" --gas-prices auto --gas-adjustment 1.3 --fees auto --rpc.laddr tcp://0.0.0.0:26657 --log_level $LOGLEVEL --json-rpc.api eth,txpool,personal,net,debug,web3 --api.enable --home "$HOMEDIR"
+volleyd start --pruning=nothing "$TRACE" --gas-prices auto --gas-adjustment 1.3 --fees auto --rpc.laddr tcp://0.0.0.0:26657 --log_level $LOGLEVEL --json-rpc.api eth,txpool,personal,net,debug,web3 --api.enable --home "$HOMEDIR"
 
-# byted tx staking create-validator --amount=1000000000000000000000bit --from=validator2 --pubkey=$(byted tendermint show-validator) --moniker="validator2" --chain-id byte_1919-1 --commission-rate="0.1" --commission-max-rate="0.2" --commission-max-change-rate="0.05" --min-self-delegation="500000000" --keyring-backend=test --yes --broadcast-mode block
+# volleyd tx staking create-validator --amount=1000000000000000000000avolley --from=validator2 --pubkey=$(volleyd tendermint show-validator) --moniker="validator2" --chain-id byte_1919-1 --commission-rate="0.1" --commission-max-rate="0.2" --commission-max-change-rate="0.05" --min-self-delegation="500000000" --keyring-backend=test --yes --broadcast-mode block
