@@ -6,22 +6,22 @@ MONIKER="second"
 MAINNODE_RPC="https://rpc.bytexc.org"
 MAINNODE_ID="fd930ec05a4120c9f80086351354127545f659f7@8.209.96.231:26656"
 KEYRING="os"
-CONFIG="$HOME/.volleyd/config/config.toml"
-APPCONFIG="$HOME/.volleyd/config/app.toml"
+CONFIG="$HOME/.v2xd/config/config.toml"
+APPCONFIG="$HOME/.v2xd/config/app.toml"
 
 # install chain binary file
 make install
 
 # Set moniker and chain-id for chain (Moniker can be anything, chain-id must be same mainnode)
-volleyd init $MONIKER --chain-id=$CHAINID
+v2xd init $MONIKER --chain-id=$CHAINID
 
 # Fetch genesis.json from genesis node
-curl $MAINNODE_RPC/genesis? | jq ".result.genesis" > ~/.volleyd/config/genesis.json
+curl $MAINNODE_RPC/genesis? | jq ".result.genesis" > ~/.v2xd/config/genesis.json
 
-volleyd validate-genesis
+v2xd validate-genesis
 
 # set seed to main node's id manually
-# sed -i 's/seeds = ""/seeds = "'$MAINNODE_ID'"/g' ~/.volleyd/config/config.toml
+# sed -i 's/seeds = ""/seeds = "'$MAINNODE_ID'"/g' ~/.v2xd/config/config.toml
 
 # add for rpc
 sed -i 's/timeout_commit = "5s"/timeout_commit = "2s"/g' "$CONFIG"
@@ -33,7 +33,7 @@ sed -i 's/enabled-unsafe-cors = false/enabled-unsafe-cors = true/g'  "$APPCONFIG
 sed -i 's/api = "eth,net,web3"/api = "eth,txpool,personal,net,debug,web3"/g' "$APPCONFIG"
 
 # add account for validator in the node
-volleyd keys add $VALIDATOR --keyring-backend $KEYRING
+v2xd keys add $VALIDATOR --keyring-backend $KEYRING
 
 # run node
-#volleyd start --rpc.laddr tcp://0.0.0.0:26657 --pruning=nothing
+#v2xd start --rpc.laddr tcp://0.0.0.0:26657 --pruning=nothing

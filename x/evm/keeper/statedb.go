@@ -87,14 +87,17 @@ func (k *Keeper) ForEachStorage(ctx sdk.Context, addr common.Address, cb func(ke
 // SetBalance update account's balance, compare with current balance first, then decide to mint or burn.
 func (k *Keeper) SetBalance(ctx sdk.Context, addr common.Address, amount *big.Int) error {
 	cosmosAddr := sdk.AccAddress(addr.Bytes())
-
+	fmt.Println("========== evm module setBalance amount========", amount.String())
 	params := k.GetParams(ctx)
 	coin := k.bankKeeper.GetBalance(ctx, cosmosAddr, params.EvmDenom)
 	balance := coin.Amount.BigInt()
+	fmt.Println("========== evm module setBalance cur balance ========", balance.String())
 	delta := new(big.Int).Sub(amount, balance)
+	fmt.Println("========== evm module setBalance cur delta ========", delta.String())
 	switch delta.Sign() {
 	case 1:
 		// mint
+		fmt.Println("=============== mint ===================",  types.ModuleName)
 		coins := sdk.NewCoins(sdk.NewCoin(params.EvmDenom, sdkmath.NewIntFromBigInt(delta)))
 		if err := k.bankKeeper.MintCoins(ctx, types.ModuleName, coins); err != nil {
 			return err
@@ -104,6 +107,7 @@ func (k *Keeper) SetBalance(ctx sdk.Context, addr common.Address, amount *big.In
 		}
 	case -1:
 		// burn
+		fmt.Println("=============== burn ===================",  types.ModuleName)
 		coins := sdk.NewCoins(sdk.NewCoin(params.EvmDenom, sdkmath.NewIntFromBigInt(new(big.Int).Neg(delta))))
 		if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, cosmosAddr, types.ModuleName, coins); err != nil {
 			return err

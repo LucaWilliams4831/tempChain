@@ -4,7 +4,7 @@
       "description": 1,
       "denom_units": [
         {
-          "denom": "volley",
+          "denom": "v2x",
           "exponent": 0
         },
         {
@@ -12,9 +12,9 @@
           "exponent": 18
         }
       ],
-      "base": "volley",
-      "display": "volley",
-      "name": "volley",
+      "base": "v2x",
+      "display": "v2x",
+      "name": "v2x",
       "symbol": "BEXC"
     }
   ]

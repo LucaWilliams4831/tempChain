@@ -191,7 +191,7 @@ func init() {
 		panic(err)
 	}
 
-	DefaultNodeHome = filepath.Join(userHomeDir, ".volleyd")
+	DefaultNodeHome = filepath.Join(userHomeDir, ".v2xd")
 
 	// manually update the power reduction by replacing micro (u) -> atto (a) evmos
 	sdk.DefaultPowerReduction = sdkmath.NewIntFromBigInt(new(big.Int).Exp(big.NewInt(1), big.NewInt(1), nil))
@@ -203,7 +203,7 @@ func init() {
 }
 
 // Name defines the application binary name
-const Name = "volleyd"
+const Name = "v2xd"
 
 var (
 	// DefaultNodeHome default home directories for the application daemon

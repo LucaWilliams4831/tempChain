@@ -1,6 +1,6 @@
 module.exports = {
   apps : [{
     name   : "Byte Node",
-    script : "volleyd start"
+    script : "v2xd start"
   }]
 }

@@ -34,6 +34,8 @@ import (
 
 	"github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	"fmt"
+	
 )
 
 // EthAccountVerificationDecorator validates an account balance checks
@@ -86,7 +88,7 @@ func (avd EthAccountVerificationDecorator) AnteHandle(
 		// check whether the sender address is EOA
 		fromAddr := common.BytesToAddress(from)
 		acct := avd.evmKeeper.GetAccount(ctx, fromAddr)
-
+		fmt.Println("======== eth.go ======== fromAddr \n", fromAddr)
 		if acct == nil {
 			acc := avd.ak.NewAccountWithAddress(ctx, from)
 			avd.ak.SetAccount(ctx, acc)
@@ -164,6 +166,7 @@ func (egcd EthGasConsumeDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simula
 
 	evmParams := egcd.evmKeeper.GetParams(ctx)
 	evmDenom := evmParams.GetEvmDenom()
+	fmt.Println("=========evm denom ========= ", evmDenom)
 	chainCfg := evmParams.GetChainConfig()
 	ethCfg := chainCfg.EthereumConfig(egcd.evmKeeper.ChainID())
 
@@ -200,6 +203,7 @@ func (egcd EthGasConsumeDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simula
 		}
 
 		fees, err := keeper.VerifyFee(txData, evmDenom, baseFee, homestead, istanbul, ctx.IsCheckTx())
+		fmt.Println("===================fees ===========", fees.String())
 		if err != nil {
 			return ctx, errorsmod.Wrapf(err, "failed to verify the fees")
 		}

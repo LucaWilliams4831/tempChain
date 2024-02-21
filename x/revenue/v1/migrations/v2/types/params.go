@@ -29,7 +29,7 @@ var _ types.LegacyParams = &V2Params{}
 
 // Parameter store key
 var (
-	DefaultEnableRevenue   = true
+	DefaultEnableRevenue   = false
 	DefaultDeveloperShares = sdk.NewDecWithPrec(50, 2) // 50%
 	// DefaultAddrDerivationCostCreate Cost for executing `crypto.CreateAddress` must be at least 36 gas for the
 	// contained keccak256(word) operation

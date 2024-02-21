@@ -16,8 +16,8 @@ RUN apt-get install ca-certificates jq -y
 
 WORKDIR /root
 
-COPY --from=build-env /go/src/github.com/evmos/evmos/build/volleyd /usr/bin/volleyd
+COPY --from=build-env /go/src/github.com/evmos/evmos/build/v2xd /usr/bin/v2xd
 
 EXPOSE 26656 26657 1317 9090 8545 8546
 
-CMD ["volleyd"]
+CMD ["v2xd"]

@@ -34,7 +34,7 @@ import (
 	"github.com/ethereum/go-ethereum/eth/filters"
 )
 
-// BloomIV represents the volley indexes and value inside the bloom filter that belong
+// BloomIV represents the v2x indexes and value inside the bloom filter that belong
 // to some key.
 type BloomIV struct {
 	I [3]uint
@@ -222,7 +222,7 @@ func (f *Filter) blockLogs(blockRes *tmrpctypes.ResultBlockResults, bloom ethtyp
 func createBloomFilters(filters [][][]byte, logger log.Logger) [][]BloomIV {
 	bloomFilters := make([][]BloomIV, 0)
 	for _, filter := range filters {
-		// Gather the volley indexes of the filter rule, special casing the nil filter
+		// Gather the v2x indexes of the filter rule, special casing the nil filter
 		if len(filter) == 0 {
 			continue
 		}
